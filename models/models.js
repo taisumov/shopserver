@@ -2,7 +2,6 @@ const sequelize = require('../db')          // Для подключения о�
 const {DataTypes} = require('sequelize')    // Для объявления типов полей
 
 // Инициализируем модели
-
 const User = sequelize.define('user',{
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     email: {type: DataTypes.STRING, unique: true},
@@ -23,11 +22,15 @@ const BasketItem = sequelize.define('basket_item', {
 
 const Item = sequelize.define('item', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    name: {type: DataTypes.STRING, unique: true, allowNull: false},
-    title: {type: DataTypes.STRING, unique: true, allowNull: false},
+    name: {type: DataTypes.STRING, allowNull: false},
+    title: {type: DataTypes.STRING, allowNull: false},
     price: {type: DataTypes.INTEGER, allowNull: false},
-    rating: {type: DataTypes.INTEGER, defaultValue: 0},
-    img: {type: DataTypes.STRING, allowNull: false},
+    description: {type: DataTypes.STRING, allowNull: false},
+    region: {type: DataTypes.STRING},
+    size: {type: DataTypes.STRING},
+    rating: {type: DataTypes.FLOAT, defaultValue: 0},
+    counter_rating: {type: DataTypes.INTEGER, defaultValue: 0},
+    img: {type: DataTypes.STRING},
 })
 
 const Category = sequelize.define('category', {
@@ -38,12 +41,7 @@ const Category = sequelize.define('category', {
 const Rating = sequelize.define('rating', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     rate: {type: DataTypes.INTEGER, allowNull: false},
-})
-
-const ItemInfo = sequelize.define('item_info', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    title: {type: DataTypes.STRING, allowNull: false},
-    description: {type: DataTypes.STRING, allowNull: false},
+    is_read: {type: DataTypes.BOOLEAN, allowNull: false, defaultValue: true},
 })
 
 const Order = sequelize.define('order', {
@@ -54,8 +52,13 @@ const OrderItem = sequelize.define('order_item', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
 })
 
-// Описываем связи
+// const ItemInfo = sequelize.define('item_info', {
+//     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+//     title: {type: DataTypes.STRING, allowNull: false},
+//     description: {type: DataTypes.STRING, allowNull: false},
+// })
 
+// Описываем связи
 User.hasOne(Basket)
 Basket.belongsTo(User)
 
@@ -74,8 +77,8 @@ Rating.belongsTo(Item)
 Item.hasMany(BasketItem)
 BasketItem.belongsTo(Item)
 
-Item.hasMany(ItemInfo, {as: 'info'})
-ItemInfo.belongsTo(Item)
+// Item.hasMany(ItemInfo, {as: 'info'})
+// ItemInfo.belongsTo(Item)
 
 User.hasMany(Order)
 Order.belongsTo(User)
@@ -90,5 +93,5 @@ module.exports = {
     Item,
     Category,
     Rating,
-    ItemInfo
+    //ItemInfo,
 }

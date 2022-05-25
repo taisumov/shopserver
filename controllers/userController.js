@@ -67,6 +67,7 @@ class UserController {
 
     async isAuth(req, res, next) {
         let user = await User.findOne({where: {email: req.user.email}})
+        console.log(user)
         const token = generateJwt(
             user.id,
             user.email,
@@ -88,7 +89,6 @@ class UserController {
         let avatarUpdate //const
         let fileName
         let compareUser
-
 
         if(req.files) {
             avatarUpdate = req.files.avatarUpdate
